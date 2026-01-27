@@ -4,8 +4,8 @@ node_modules/
 # package.json
 
 # Environment files
-# .env
-# .env.*
+.env
+.env.*
 
 # Temporary / practice folders
 *.pdf
