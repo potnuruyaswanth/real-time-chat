@@ -1,6 +1,6 @@
-// 🔄 UPDATED FILE - Remove online users tracking
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
+import { FiMessageCircle, FiWifi, FiWifiOff } from "react-icons/fi";
 import MessageList from "./MessageList";
 import ChatInput from "./ChatInput";
 import "./Chat.css";
@@ -13,7 +13,12 @@ function Chat() {
   const [isConnected, setIsConnected] = useState(false);
   const [typingUser, setTypingUser] = useState("");
   const [currentUser, setCurrentUser] = useState("");
-  // 🗑️ REMOVED - const [onlineUsers, setOnlineUsers] = useState(0);
+
+  const todayLabel = new Date().toLocaleDateString([], {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -45,18 +50,12 @@ function Chat() {
       setTimeout(() => setTypingUser(""), 2000);
     });
 
-    // 🗑️ REMOVED - Online users listener
-    // socket.on('onlineUsers', (count) => {
-    //   setOnlineUsers(count);
-    // });
-
     return () => {
       socket.off("connect");
       socket.off("disconnect");
       socket.off("message");
       socket.off("receiveMessage");
       socket.off("userTyping");
-      // 🗑️ REMOVED - socket.off('onlineUsers');
     };
   }, []);
 
@@ -80,13 +79,16 @@ function Chat() {
     <div className="chat-container">
       <div className="chat-header">
         <div className="header-left">
-          <div className="header-icon">💬</div>
+          <div className="header-icon" aria-hidden="true">
+            <FiMessageCircle />
+          </div>
           <div className="header-info">
             <h1>Real-Time Chat</h1>
-            {/* 🗑️ REMOVED - Online count display */}
+            <p className="header-subtitle">Live room · {todayLabel}</p>
           </div>
         </div>
         <div className="status">
+          {isConnected ? <FiWifi /> : <FiWifiOff />}
           <div
             className={`status-dot ${
               isConnected ? "connected" : "disconnected"
@@ -105,7 +107,7 @@ function Chat() {
             <span></span>
             <span></span>
           </div>
-          <span>{typingUser} is typing...</span>
+          <span>{typingUser} is typing</span>
         </div>
       )}
 

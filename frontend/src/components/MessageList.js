@@ -1,9 +1,7 @@
-// 🔄 UPDATED FILE
 import React, { useEffect, useRef } from "react";
 import "./MessageList.css";
 
 function MessageList({ messages, currentUser }) {
-  // ⭐ Add currentUser prop
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -18,40 +16,42 @@ function MessageList({ messages, currentUser }) {
     <div className="messages-container">
       {messages.length === 0 ? (
         <div className="no-messages">
-          <div className="no-messages-icon">💬</div>
+          <div className="no-messages-icon">Chat</div>
           <h3>No messages yet</h3>
-          <p>Start the conversation! 👋</p>
+          <p>Start the conversation and say hello.</p>
         </div>
       ) : (
         messages.map((msg, index) => {
-          // ⭐ NEW - Check if current user is sender
           const isSentByMe = msg.type === "message" && msg.user === currentUser;
+          const initials = msg.user ? msg.user.charAt(0).toUpperCase() : "?";
+
+          if (msg.type === "system") {
+            return (
+              <div key={index} className="message system">
+                <div className="message-text">{msg.text}</div>
+              </div>
+            );
+          }
 
           return (
             <div
               key={index}
-              className={`message ${
-                msg.type === "system"
-                  ? "system"
-                  : isSentByMe
-                  ? "sent" // ⭐ My message - right side
-                  : "received" // ⭐ Others' message - left side
-              }`}
+              className={`message-row ${isSentByMe ? "mine" : "theirs"}`}
             >
-              {msg.type === "system" ? (
+              {!isSentByMe && <div className="message-avatar">{initials}</div>}
+
+              <div className={`message ${isSentByMe ? "sent" : "received"}`}>
+                <div className="message-user">{msg.user}</div>
                 <div className="message-text">{msg.text}</div>
-              ) : (
-                <>
-                  <div className="message-user">{msg.user}</div>
-                  <div className="message-text">{msg.text}</div>
-                  <div className="message-time">
-                    {new Date(msg.timestamp).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </div>
-                </>
-              )}
+                <div className="message-time">
+                  {new Date(msg.timestamp).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </div>
+              </div>
+
+              {isSentByMe && <div className="message-avatar me">{initials}</div>}
             </div>
           );
         })

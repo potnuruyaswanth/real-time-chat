@@ -1,8 +1,11 @@
 .App {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background:
+    radial-gradient(circle at 8% 12%, rgba(255, 210, 175, 0.7) 0%, rgba(255, 210, 175, 0) 32%),
+    radial-gradient(circle at 92% 80%, rgba(139, 214, 205, 0.8) 0%, rgba(139, 214, 205, 0) 36%),
+    linear-gradient(135deg, #fdf7ef 0%, #e6f3f4 42%, #d8ebee 100%);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: clamp(12px, 4vw, 28px);
 }
